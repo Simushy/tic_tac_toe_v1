@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <title>Simushy</title>
+    <meta charset="UTF-8" />
+    <meta name="google" value="notranslate" />
+  </head>
+  <body>
+      <script>
+        var runda = 0;
+        var licznik = 0;
+        var indeks_gracza = 0;
+        var remis = 0;
+        var win = 0;
+        function play() {
+          runda = 0
+          remis = 0;
+          win = 0;
+          document.getElementById("plansza").innerHTML = "";
+          var rozmiar = Math.abs(document.getElementById("rozmiar").value);
+          document.getElementById("tura").innerText = "Tura gracza: " + document.getElementById("players").value[0]
+          for (wiersz = 1; wiersz <= rozmiar; wiersz++) {
+            for (kolumna = 1; kolumna <= rozmiar; kolumna++) {
+              document.getElementById("plansza").innerHTML +=
+                '<button class="gra" id="' +
+                wiersz +
+                "_" +
+                kolumna +
+                '" onclick="set_player(this.id);check_for_win();" style="height:50px;width:50px;font-size:20px;"> </button>';
+            }
+            document.getElementById("plansza").innerHTML += "<br/>";
+          }
+        }
+        function set_player(id) {
+          if (document.getElementById(id).innerText == " " && win == 0) {
+            if (runda >= document.getElementById("players").value.length)
+              runda = 0;
+            document.getElementById(id).innerText =
+              document.getElementById("players").value[runda];
+            remis++;
+            if (runda == document.getElementById("players").value.length -1)
+            document.getElementById("tura").innerText = "Tura gracza: " + document.getElementById("players").value[0]
+            else
+            document.getElementById("tura").innerText = "Tura gracza: " + document.getElementById("players").value[runda+1]
+            runda++;
+          }
+        }
+
+        function wygrana(player) {
+          alert("Gracz " + player + " wygrał!");
+          win++;
+          //document.getElementsByClassName("gra").onclick = null
+          return;
+        }
+        function check_for_win() {
+          if (win == 0) {
+            sprawdz_kolumne();
+            sprawdz_rzad();
+            sprawdz_ukos();
+            sprawdz_ukos_reverse();
+            if (
+              remis ==
+                document.getElementById("rozmiar").value *
+                  document.getElementById("rozmiar").value &&
+              win != 1
+            )
+              alert("Remis!");
+          }
+        }
+        function sprawdz_rzad() {
+          var wiersz = 1;
+          var kolumna = 1;
+          var indeks_gracza = 0;
+          var rozmiar = document.getElementById("rozmiar").value;
+          while (
+            indeks_gracza < document.getElementById("players").value.length
+          ) {
+            while (wiersz <= rozmiar) {
+              var licznik = 0;
+              while (kolumna <= rozmiar) {
+                id = wiersz + "_" + kolumna;
+                if (
+                  document.getElementById(id).innerText ==
+                  document.getElementById("players").value[indeks_gracza]
+                ) {
+                  licznik++;
+                }
+                if (licznik == rozmiar) {
+                  wygrana(
+                    document.getElementById("players").value[indeks_gracza]
+                  );
+                  return;
+                }
+                kolumna++;
+              }
+              wiersz++;
+              kolumna = 1;
+            }
+            wiersz = 1;
+            indeks_gracza++;
+          }
+        }
+        function sprawdz_kolumne() {
+          var wiersz = 1;
+          var kolumna = 1;
+          var indeks_gracza = 0;
+          var rozmiar = document.getElementById("rozmiar").value;
+          while (
+            indeks_gracza < document.getElementById("players").value.length
+          ) {
+            while (wiersz <= rozmiar) {
+              var licznik = 0;
+              while (kolumna <= rozmiar) {
+                id = kolumna + "_" + wiersz;
+                if (
+                  document.getElementById(id).innerText ==
+                  document.getElementById("players").value[indeks_gracza]
+                ) {
+                  licznik++;
+                }
+                if (licznik == rozmiar) {
+                  wygrana(
+                    document.getElementById("players").value[indeks_gracza]
+                  );
+                  return;
+                }
+                kolumna++;
+              }
+              wiersz++;
+              kolumna = 1;
+            }
+            wiersz = 1;
+            indeks_gracza++;
+          }
+        }
+        function sprawdz_ukos() {
+          var wiersz = 1;
+          var kolumna = 1;
+          var indeks_gracza = 0;
+          var rozmiar = document.getElementById("rozmiar").value;
+          while (
+            indeks_gracza < document.getElementById("players").value.length
+          ) {
+            while (wiersz <= rozmiar) {
+              var licznik = 0;
+              while (kolumna <= rozmiar) {
+                id = wiersz + "_" + kolumna;
+                if (
+                  document.getElementById(id).innerText ==
+                  document.getElementById("players").value[indeks_gracza]
+                ) {
+                  licznik++;
+                }
+                if (licznik == rozmiar) {
+                  wygrana(
+                    document.getElementById("players").value[indeks_gracza]
+                  );
+                  return;
+                }
+                kolumna++;
+                wiersz++;
+              }
+            }
+            kolumna = 1;
+            wiersz = 1;
+            indeks_gracza++;
+          }
+        }
+        function sprawdz_ukos_reverse() {
+          var rozmiar = document.getElementById("rozmiar").value;
+          var wiersz = 1;
+          var kolumna = rozmiar;
+          var indeks_gracza = 0;
+          while (
+            indeks_gracza < document.getElementById("players").value.length
+          ) {
+            while (wiersz <= rozmiar) {
+              var licznik = 0;
+              while (kolumna >= 1) {
+                id = wiersz + "_" + kolumna;
+                if (
+                  document.getElementById(id).innerText ==
+                  document.getElementById("players").value[indeks_gracza]
+                ) {
+                  licznik++;
+                }
+                if (licznik == rozmiar) {
+                  wygrana(
+                    document.getElementById("players").value[indeks_gracza]
+                  );
+                  return 1;
+                }
+                kolumna--;
+                wiersz++;
+              }
+            }
+            kolumna = rozmiar;
+            wiersz = 1;
+            indeks_gracza++;
+          }
+        }
+      </script>
+      <div class="main">
+        <br />
+        <a style="font-size:25px;">Podaj symbole graczy</a>
+        <br />
+        <input type="text" id="players" style="font-size:25px;width:15%;"/>
+        <br /><br />
+        <a style="font-size:25px;">Podaj rozmiar planszy</a>
+        <br />
+        <input type="number" id="rozmiar" style="font-size:25px;width:15%;" />
+        <br /><br />
+        <button id="play" onclick="play()" style="font-size:25px;">Graj</button>
+        <br><br>
+        <div id="tura" style="font-size:25px;">
+
+        </div>
+        <br><br>
+        <div id="plansza"></div>
+        <br>
+      </div>
+    </div>
+    <br />
+    <br />
+    </div>
+  </body>
+</html>
